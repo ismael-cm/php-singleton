@@ -1,58 +1,35 @@
 <?php
-require('Log.php');
+    require('Log.php');
+    require('EventLoggerFactory.php');
 
-// Implementación del patrón Factory Method
-abstract class EventLogger {
-    abstract public function logEvent($tiempo);
-}
+    //Probar que sea la misma instancia
+    $logCorrer = Logger::getInstance();
+    $logBoxeo = Logger::getInstance();
+    $esMismaInstancia = ($logCorrer === $logBoxeo ? "Verdadero" : "Falso");
 
-class CorrerEventLogger extends EventLogger {
-    public function logEvent($tiempo) {
-        echo "\nEvento de correr logged - Tiempo: $tiempo\n";
-    }
-}
+    $logBoxeo->log("\nProbar mensajes del log");
 
-class CiclismoEventLogger extends EventLogger {
-    public function logEvent($tiempo) {
-        echo "\nEvento de ciclismo logged - Tiempo: $tiempo\n";
-    }
-}
+    $correrLogger = EventLoggerFactory::createLogger('correr');
+    $ciclismoLogger = EventLoggerFactory::createLogger('ciclismo');
+    $boxeoLogger = EventLoggerFactory::createLogger('boxeo');
+?>
 
-class BoxeoEventLogger extends EventLogger {
-    public function logEvent($tiempo) {
-        echo "\nEvento de boxeo logged - Tiempo: $tiempo\n";
-    }
-}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Probando los logs</h1>
+    <p><b>¿Es la misma instancia?</b> R// <?php echo $esMismaInstancia ?></p>
+    <p><?php $boxeoLogger->logEvent(500); ?></p>
+    <p><?php $ciclismoLogger->logEvent(10); ?></p>
+    <p><?php $correrLogger->logEvent(5); ?></p>
 
-class EventLoggerFactory {
-    public static function createLogger($eventType) {
-        switch ($eventType) {
-            case 'correr':
-                return new CorrerEventLogger();
-            case 'ciclismo':
-                return new CiclismoEventLogger();
-            case 'boxeo':
-                return new BoxeoEventLogger();
-            default:
-                throw new Exception("Tipo de evento invalido");
-        }
-    }
-}
-
-// Ejemplo de uso
-$logger1 = Logger::getInstance();
-$logger2 = Logger::getInstance();
-echo ($logger1 === $logger2 ? "true" : "false") . "\n"; // Output: true
-
-$logger1->log("\nProbar mensajes del log");
-
-$correrLogger = EventLoggerFactory::createLogger('correr');
-$correrLogger->logEvent(5);
-
-$ciclismoLogger = EventLoggerFactory::createLogger('ciclismo');
-$ciclismoLogger->logEvent(10);
-
-$boxeoLogger = EventLoggerFactory::createLogger('boxeo');
-$boxeoLogger->logEvent(500);
+    
+</body>
+</html>
 
 
