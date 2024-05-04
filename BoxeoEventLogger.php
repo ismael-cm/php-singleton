@@ -3,6 +3,7 @@ require_once('EventLogger.php');
 
 class BoxeoEventLogger extends EventLogger {
     public function logEvent($tiempo) {
-        echo "\nEvento de boxeo logged - Tiempo: $tiempo\n";
+        $logger = Logger::getInstance();
+        $logger->log("Evento de boxeo logged - Tiempo: $tiempo");
     }
 }
